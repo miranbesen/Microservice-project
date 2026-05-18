@@ -15,19 +15,24 @@ public class CircuitBreakerController {
             LoggerFactory.getLogger(CircuitBreakerController.class);
 
     @GetMapping("/sample-api")
-    @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+//    Retry: Basarisiz isteklerde sample-api ayarlarina gore metodu tekrar dener.
+//    @Retry(name = "sample-api", fallbackMethod = "hardcodedResponse")
+//    CircuitBreaker: Hata orani artarsa devreyi acar ve fallback cevabina yonlendirir.
+//    @CircuitBreaker(name = "default", fallbackMethod = "hardcodedResponse")
+//    RateLimiter: Belirli bir zaman araliginda kabul edilecek istek sayisini sinirlar.
+//    @RateLimiter(name = "default")
+//    Bulkhead: Ayni anda calisabilecek istek sayisini sinirlayarak sistemi korur.
+//    @Bulkhead(name = "sample-api")
     public String sampleApi() {
-
         logger.info("Sample api call received");
 
         ResponseEntity<String> forEntity =
-                new RestTemplate().getForEntity(
-                        "http://localhost:8080/some-dummy-url",
-                        String.class
-                );
+                new RestTemplate().getForEntity("http://localhost:8080/some-api",
+                        String.class);
 
         return forEntity.getBody();
     }
+
 
     public String hardcodedResponse(Exception ex) {
         return "fallback-response";
