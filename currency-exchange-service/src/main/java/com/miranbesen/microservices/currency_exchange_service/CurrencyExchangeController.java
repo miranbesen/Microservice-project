@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 
 @RestController
@@ -16,6 +17,8 @@ public class CurrencyExchangeController {
 
     @Autowired
     private Environment environment;
+
+    private Logger logger = LoggerFactory.getLogger(CurrencyExchangeController.class);
 
     @Autowired
     private CurrencyExchangeRepository repository;
@@ -27,6 +30,8 @@ public class CurrencyExchangeController {
         if (currencyExchange == null) {
             throw new RuntimeException("Unable to Find data for" + from + "to" + to);
         }
+
+        logger.info("retrieveExchangeValue called with from {} to {}", from, to);
 
         String port = environment.getProperty("local.server.port");
         currencyExchange.setEnvironment(port);
